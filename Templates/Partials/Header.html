@@ -1,0 +1,259 @@
+{% load static %}
+<!--  ==========  -->
+<!--  = Header =  -->
+<!--  ==========  -->
+<header id="header">
+    <div class="container">
+        <div class="row">
+
+            <!--  ==========  -->
+            <!--  = Logo =  -->
+            <!--  ==========  -->
+            <div class="span7">
+                <a class="brand" href="{% url 'Main:Home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Webmarket Logo" width="48" height="48" />
+                    <span class="pacifico">Webmarket</span>
+                    <span class="tagline">قالب فروشگاهی HTML قدرتمند</span>
+                </a>
+            </div>
+
+            <!--  ==========  -->
+            <!--  = Social Icons =  -->
+            <!--  ==========  -->
+            <div class="span5">
+                <div class="topmost-line">
+                    <div class="lang-currency">
+                        <div class="dropdown js-selectable-dropdown">
+                            <a data-toggle="dropdown" class="selected" href="#" >
+                                <span class="js-change-text">
+                                    <i class="famfamfam-flag-ir" ></i>
+                                    فارسی (FA) 
+                                </span> 
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="top-right">
+                    <div class="register">
+                        {% if user.is_authenticated %}
+                        <div class="dropdown js-selectable-dropdown">
+                            <a data-toggle="dropdown" class="selected" href="#">
+                                <span class="js-change-text"> سلام 
+                                {% if user.first_name or user.last_name %}
+                                    {{user.first_name}} {{user.last_name}}
+                                {% else %}
+                                    {{user.username}}
+                                {% endif %}</span> <b class="caret"></b></a>
+                            <ul class="dropdown-menu js-possibilities" role="menu" aria-labelledby="dLabel" >
+                                <li><a href="{% url 'Accounts:Edit_User' user.pk %}?rd={{request.path}}" > ویرایش اطلاعات </a></li>
+                                <li><a href="{% url 'Cart_Order:User_Orders' user.id %}"> لیست سفارشات </a></li>
+                                <li><a href="{% url 'Accounts:Logout' %}?rd={{request.path}}"> خروج </a></li>
+                            </ul>
+                        </div>
+                        {% else %}
+                            <a href="#loginModal" role="button" data-toggle="modal">ورود</a> یا
+                            <a href="#registerModal" role="button" data-toggle="modal">ثبت نام</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div> <!-- /social icons -->
+        </div>
+    </div>
+</header>
+    <!--  ==========  -->
+    <!--  = Main Menu / navbar =  -->
+    <!--  ==========  -->
+    <div class="navbar navbar-static-top" id="stickyNavbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="span9">
+                        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
+                        <!--  ==========  -->
+                        <!--  = Menu =  -->
+                        <!--  ==========  -->
+                        <div class="nav-collapse collapse">
+                            <ul class="nav" id="mainNavigation">
+                                <li {% if request.path == '/' %} class="active" {% endif %} ><!--  class="dropdown active" -->
+                                     <a href="{% url 'Main:Home' %}"> خانه  </a><!-- class="dropdown-toggle" <b class="caret"></b>-->
+                                </li>
+                                <li {% if request.path == '/About-Us/' %} class="active" {% endif %} ><a href="{% url 'Main:AboutUs' %}">درباره ما</a></li>
+                                <li {% if request.path == '/Contact/' %} class="active" {% endif %}><a href="{% url 'Main:Contact' %}">تماس با ما</a></li>
+                            </ul>
+
+                            <!--  ==========  -->
+                            <!--  = Search form =  -->
+                            <!--  ==========  -->
+                            <form class="navbar-form pull-right" action="{% url 'Main:Search' %}" method="get">
+                                <button type="submit"><span class="icon-search"></span></button>
+                                <input type="text" class="span1" name="search" id="navSearchInput">
+                            </form>
+                        </div><!-- /.nav-collapse -->
+                    </div>
+
+                    <!--  ==========  -->
+                    <!--  = Cart =  -->
+                    <!--  ==========  -->
+                    {% if user.is_authenticated  %}
+
+                        <div class="span3">
+                            <div class="cart-container" id="cartContainer">
+                                <div class="cart">
+                                    <p class="items">سبد خرید (<span class="dark-clr" id="cart_item_count">{{ user.cart_item.count }}</span>)</p>
+                                    <p class="dark-clr hidden-tablet" id="cart-total-price">{{ user.cart.total_price }}</p>
+                                    <a href="{% url 'Cart_Order:Order_Checkout_1' %}" class="btn btn-danger">
+                                        <!-- <span class="icon icons-cart"></span> -->
+                                        <i class="icon-shopping-cart"></i>
+                                    </a>
+                                </div>
+                                <div class="open-panel">
+                                    <div id="open-panel">
+                                    {% for Item in user.cart_item %}
+                                        <div class="item-in-cart clearfix">
+                                            <div class="image">
+                                                <img src="{{ Item.product.get_product_banner }}" width="124" height="124"
+                                                    alt="cart item" />
+                                            </div>
+                                            <div class="desc">
+                                                <strong><a href="{{ Item.product.get_absolute_url }}"> {{ Item.product.name }} </a></strong>
+                                                <span class="light-clr qty">
+                                                    سایز : {{Item.size}}
+                                                    &nbsp;
+                                                </span>
+                                                <span class="light-clr qty">
+                                                    رنگ : {{Item.color}}
+                                                    &nbsp;
+                                                </span>
+                                                <span class="light-clr qty">
+                                                    تعداد : {{Item.quantity}}
+                                                    &nbsp;
+                                                    <a href="{% url 'Cart_Order:Delete_CartItem' %}?id={{Item.pk}}&rd={{request.path}}" class="icon-remove-sign cart-delete-btn" title="Remove Item" data-id="{{ Item.pk }}" data-price="{{Item.item_price}}"></a>
+                                                </span>
+                                            </div>
+                                            <div class="price">
+                                                <strong id="item_price"> {{ Item.item_price }} </strong>
+                                            </div>
+                                        </div>
+                                        {% empty %}
+                                        <p style="text-align: center;margin: 10px;font-size: 18px" id="no_item">هیچ محصولی وجود ندارد</p>
+                                        <style>
+                                            .proceed{
+                                                display: none;
+                                            }
+                                        </style>
+                                    {% endfor %}
+                                    </div>
+                                    <div class="summary">
+                                        <div class="line">
+                                            <div class="row-fluid">
+                                                <div class="span6">هزینه ارسال </div>
+                                                <div class="span6 align-right">20,000</div>
+                                            </div>
+                                        </div>
+                                        <div class="line">
+                                            <div class="row-fluid">
+                                                <div class="span6">جمع کل </div>
+                                                <div class="span6 align-right size-16" id="total_price_plus_post"> {{ user.cart.total_price }} </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="proceed" id="proceed">
+                                        <a href="{% url 'Cart_Order:Order_Checkout_1' %}" class="btn btn-danger pull-right bold higher">تصویه
+                                            حساب <i class="icon-shopping-cart"></i></a>
+                                        <small>هزینه ارسال پست پیشتاز <a href="#">اطلاعات
+                                                بیشتر</a></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- /cart -->    
+                        
+                                   
+                    {% else %}
+                    <div class="span3">
+                        <div class="cart-container" id="cartContainer">
+                            <div class="cart">
+                                <p class="items">سبد خرید <span class="dark-clr">({{ Cart|length }})</span></p>
+                                <p class="dark-clr hidden-tablet"></p>
+                                <a href="{% url 'Cart_Order:Order_Checkout_1' %}" class="btn btn-danger">
+                                    <!-- <span class="icon icons-cart"></span> -->
+                                    <i class="icon-shopping-cart"></i>
+                                </a>
+                            </div>
+                            <div class="open-panel">
+                                
+                                {% for Item in Cart %}
+                                    <div class="item-in-cart clearfix">
+                                        <div class="image">
+                                            <img src="{{ Item.image }}" width="124" height="124"
+                                                alt="cart item" />
+                                        </div>
+                                        <div class="desc">
+                                            <strong><a href="{{ Item.url }}"> {{ Item.name }} </a></strong>
+                                            <span class="light-clr qty">
+                                                سایز : {{Item.size}}
+                                                &nbsp;
+                                            </span>
+                                            <span class="light-clr qty">
+                                                رنگ : {{Item.color}}
+                                                &nbsp;
+                                            </span>
+                                            <span class="light-clr qty" >
+                                                تعداد : {{Item.quantity}}
+                                                &nbsp;
+                                                <a href="{% url 'Cart_Order:Delete_CartItem' %}?id={{Item.product_id}}&color={{Item.color}}&size={{Item.size}}&rd={{request.path}}" class="icon-remove-sign" title="Remove Item"></a>
+                                            </span>
+                                        </div>
+                                        <div class="price">
+                                            <strong> {{ Item.item_price }} </strong>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <p style="text-align: center;margin: 10px;font-size: 18px">هیچ محصولی وجود ندارد</p>
+                                    <style>
+                                        .proceed{
+                                            display: none;
+                                        }
+                                    </style>
+                                {% endfor %}
+                                
+                                <div class="summary">
+                                    <div class="line">
+                                        <div class="row-fluid">
+                                            <div class="span6">هزینه ارسال </div>
+                                            <div class="span6 align-right">20,000</div>
+                                        </div>
+                                    </div>
+                                    <div class="line">
+                                        <div class="row-fluid">
+                                            <div class="span6">جمع کل </div>
+                                            <div class="span6 align-right size-16"> {{ user.UserCart.get.total_price }} </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="proceed">
+                                    <a href="{% url 'Cart_Order:Order_Checkout_1' %}" class="btn btn-danger pull-right bold higher">تصویه
+                                        حساب <i class="icon-shopping-cart"></i></a>
+                                    <small>هزینه ارسال پست پیشتاز <a href="#">اطلاعات
+                                            بیشتر</a></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- /cart --> 
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div> <!-- /main menu -->
+
+    <!--  = Login =  -->
+    {% include "Partials/Registration/Login.html" %}
+
+    <!--  = Register =  -->
+    {% include "Partials/Registration/Register.html" %}
+

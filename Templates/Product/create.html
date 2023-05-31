@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block Head %}
+<title> محصول جدید </title>
+<style>
+    .clickable {
+        font-size: 32px;
+    }
+
+    .help_text {
+        font-size: 16px;
+        color: red;
+    }
+
+    .create-box {
+        margin: 20px;
+    }
+
+    .create-form {
+        padding: 5px;
+        width: 70%;
+
+    }
+
+    .create-form label {
+        margin-top: 20px;
+        font-size: 22px;
+    }
+
+    .create-form label::before {
+        content: "* ";
+        color: red;
+        font-size: 24px;
+    }
+
+    .create-form input {
+        width: 100%;
+        font-size: 20px;
+
+    }
+
+    .create-form textarea {
+        width: 100%;
+        height: 300px;
+    }
+
+    .create-form select {
+        font-size: 18px;
+        width: 100%;
+        height: 300px;
+    }
+
+    .create-form #id_in_stock {
+        width: auto;
+        display: inline;
+    }
+
+    .submit-btn {
+        display: inline;
+        float: left;
+        width: 90px;
+        height: 60px;
+        background-color: #E54B5D;
+        color: #fff;
+        font-size: 26px;
+        padding: 5px;
+    }
+
+    .delete{
+        text-decoration: none;
+        padding: 5px;
+        /* float: left; */
+        font-size: 26px;
+        background-color: #E54B5D;
+        color: #333;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+    .delete:hover {
+        text-decoration: none;
+        background-color: #333;
+        color: #E54B5D;
+    }
+</style>
+
+{% endblock Head %}
+
+
+{% block Body %}
+
+{% include "Partials/Header.html" %}
+<div class="create-box">
+    <div class="images">
+        {% for Image in Product.get_images %}
+            <div class="">
+                <img src="{{Image}}" alt="" width="150px" height="150px">
+                <a href="{% url 'Product:Image_Delete' Image.pk %}?rd={{request.path}}" class="delete delete_product_img" data-id="{{ Image.pk }}" >حذف</a>
+            </div>
+        {% endfor %}
+    </div>
+    {% if form.errors %}
+    {% for field in form %}
+    {% if field.errors %}
+    {% for error in field.errors %}
+    <p>{{field.label}} : {{error}}</p>
+    {% endfor %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <form action="" method="post" enctype="multipart/form-data" class="create-form">
+
+        {% csrf_token %}
+        <div>
+            <label for="id_name">نام :</label>
+            <input type="text" name="name" maxlength="255" required id="id_name" autofocus {% if Product.name %}
+                value="{{Product.name}}" {% else %} value="" {% endif %}>
+        </div>
+        <div>
+            <label for="id_description">توضیحات :</label>
+            <textarea name="description" cols="40" rows="10" maxlength="500" required id="id_description" style="font-size: 26px;">{% if Product.description %}{{Product.description}} {% endif %}</textarea>
+        </div>
+
+        <div>
+            <label for="id_price">قیمت :</label>
+            <input type="number" name="price" min="1000" required id="id_price" {% if Product.price %}
+            value="{{Product.price}}" {% else %} value="" {% endif %}>
+        </div>
+
+        <div>
+            <label for="id_in_stock" style="display: inline;">موجود است :</label>
+            <input type="checkbox" name="in_stock" id="id_in_stock" {% if Product.in_stock == True %}
+            checked {% endif %}>
+        </div>
+
+        <div>
+            <label for="id_size">سایز بندی:</label>
+            <select name="size" required id="id_size" multiple>
+                {% for Size in Sizes %}
+                <option value="{{Size.id}}" {% if Size in Product.size.all %} selected {% endif %}> {{Size.size}} </option>
+                {% endfor %}
+            </select>
+            <div class="help_text">
+                برای انتخاب چند سایز دکمه CTRL را گرفته و انتخاب کنید.
+            </div>
+        </div>
+        <div>
+            <label for="id_color">رنگ ها:</label>
+            <select name="color" required id="id_color" multiple>
+                {% for Color in Colors %}
+                <option value="{{Color.id}}"
+                {% if Color in Product.colors.all %}
+                    selected
+                {% endif %}> {{Color.name}} </option>
+                {% endfor %}
+            </select>
+            <div class="help_text">
+                برای انتخاب چند رنگ دکمه CTRL را گرفته و انتخاب کنید.
+            </div>
+        </div>
+        <div class="numbered">
+            <label for="id_count">تعداد موجود :</label>
+            <input type="text" name="count" min="1" required id="id_count"  {% if Product.count %}
+            value="{{Product.count}}" {% else %} value="1" {% endif %}>
+            <span class="clickable add-one icon-plus-sign-alt"> </span>
+            <span class="clickable remove-one icon-minus-sign-alt"></span>
+        </div>
+        <div style="display: inline;">
+            <label for="id_image" style="display: inline;   width: 20%;">تصاویر :</label>
+            <input type="file" name="image" accept="image/*" 
+            {% if not Product %}
+                required
+            {% endif %}  
+            multiple id="id_image"
+            style="display: inline; width:20%">
+        </div>
+        <button type="submit" class="submit-btn"> ثبت </button>
+    </form>
+</div>
+
+{% include "Partials/Footer.html" %}
+
+{% endblock Body %}

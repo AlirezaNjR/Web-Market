@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% load static %}
+{% block Head %}
+<title> {{ Product.name }} </title>
+<style>
+    .delete {
+        text-decoration: none;
+        padding: 5px;
+        float: left;
+        background-color: #E54B5D;
+        color: #333;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+    .delete:hover {
+        text-decoration: none;
+        background-color: #333;
+        color: #E54B5D;
+    }
+
+    .edit {
+        margin-left: 5px;
+        text-decoration: none;
+        padding: 5px;
+        float: left;
+        background-color: #f53aff;
+        color: #333;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+    .edit:hover {
+        text-decoration: none;
+        background-color: #333;
+        color: #f53aff;
+    }
+</style>
+{% endblock Head %}
+
+{% block Body %}
+<div class="master-wrapper">
+
+    <!--  ==========  -->
+    <!--  = Header =  -->
+    <!--  ==========  -->
+    {% include "Partials/Header.html" %}
+
+
+    <!--  ==========  -->
+    <!--  = Breadcrumbs =  -->
+    <!--  ==========  -->
+    <div class="darker-stripe">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{% url 'Main:Home' %}">وبمارکت</a>
+                        </li>
+                        <li><span class="icon-chevron-right"></span></li>
+                        <li>
+                            <a href="shop.html">فروشگاه</a>
+                        </li>
+                        <!-- <li><span class="icon-chevron-right"></span></li>
+	                    <li>
+	                        <a href="#">محصول ویژه</a>
+	                    </li> -->
+                        <li><span class="icon-chevron-right"></span></li>
+                        <li>
+                            <a href="{{ Product.get_absolute_url }}"> {{Product.name}} </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  ==========  -->
+    <!--  = Main container =  -->
+    <!--  ==========  -->
+    <div class="container">
+        <div class="push-up top-equal blocks-spacer">
+
+            <!--  ==========  -->
+            <!--  = Product =  -->
+            <!--  ==========  -->
+            <div class="row blocks-spacer">
+
+                <!--  ==========  -->
+                <!--  = Preview Images =  -->
+                <!--  ==========  -->
+                <div class="span5">
+                    <div class="product-preview">
+                        <div class="picture">
+                            <img src="{{ Product.get_product_banner }}" alt="" width="940" height="940"
+                                id="mainPreviewImg" />
+                        </div>
+                        <div class="thumbs clearfix">
+                            {% for Image in Product.get_images %}
+                            <div class="thumb active">
+                                <a href="#mainPreviewImg"><img src="{{ Image }}" alt="" width="940" height="940" /></a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!--  ==========  -->
+                <!--  = Title and short desc =  -->
+                <!--  ==========  -->
+                <div class="span7">
+                    <div class="product-title">
+                        <h1 class="name"><span class="light" > <span id="product_name">{{Product.name}}</span>
+                                {% if user == Product.user %}
+                                <a href="{% url 'Product:Delete' Product.id %}" class="delete"> حذف </a>
+                                <a href="{% url 'Product:Edit' Product.id %}" class="edit"> ویرایش </a>
+                                {% endif %}
+                        </h1>
+                        <div class="meta">
+                            <span class="tag" id="price"> {{ Product.price }} </span>
+                            <span class="stock">
+                                {% if Product.count == 0 or Product.in_stock == False %}
+                                <span class="btn btn-danger">اتمام موجودی</span>
+                                {% elif Product.in_stock %}
+                                <span class="btn btn-success">موجود</span>
+                                {% endif %}
+                                <!-- <span class="btn btn-warning">تماس بگیرید</span> -->
+                            </span>
+                        </div>
+                    </div>
+                    <div class="product-description">
+                        <p>لورم ایپسوم متنی است که ساختگی برای طراحی و چاپ آن مورد است. صنعت چاپ زمانی لازم بود شرایطی
+                            شما باید فکر ثبت نام و طراحی، لازمه خروج می باشد. در ضمن قاعده همفکری ها جوابگوی سئوالات
+                            زیاد شاید باشد، آنچنان که لازم بود طراحی گرافیکی خوب بود. کتابهای زیادی شرایط سخت ، دشوار و
+                            کمی در سالهای دور لازم است. هدف از این نسخه فرهنگ پس از آن و دستاوردهای خوب شاید باشد.
+                            حروفچینی لازم در شرایط فعلی لازمه تکنولوژی بود که گذشته، حال و آینده را شامل گردد. سی و پنج
+                            درصد از طراحان در قرن پانزدهم میبایست پرینتر در ستون و سطر حروف لازم است، بلکه شناخت این
+                            ابزار گاه اساسا بدون هدف بود و سئوالهای زیادی در گذشته بوجود می آید، تنها لازمه آن بود. </p>
+                        <hr />
+                        <!--  ==========  -->
+                        <!--  = Add to cart form =  -->
+                        <!--  ==========  -->
+                        {% if not Product.count <= 0 and Product.in_stock %} <form class="form form-inline clearfix"
+                        action="{% url 'Cart_Order:Add_CartItem' %}?rd={{request.path}}&p_name={{Product.name}}&img={{Product.get_product_banner}}&p_url={{Product.get_absolute_url}}" method="post">
+                            <!--  -->
+                            {% csrf_token %}
+                            <div class="numbered">
+                                <input type="text" title="حداکثر تعداد قابل سفارش {{Product.count}}" name="quantity"
+                                    value="1" id="quantity_id" class="tiny-size" />
+                                <span class="clickable add-one icon-plus-sign-alt"> </span>
+                                <span class="clickable remove-one icon-minus-sign-alt"></span>
+                            </div>
+                            &nbsp;
+                            <select name="color" class="span2" id="color_id">
+                                <!-- <option value="-1">انتخاب رنگ</option> -->
+                                {% for Color in Product.colors.all %}
+                                <option value="{{Color.name}}">{{ Color.name }}</option>
+                                {% endfor %}
+                            </select>
+                            &nbsp;
+                            <select name="size" class="span2" id="size_id">
+                                <!-- <option value="-1">انتخاب سایز</option> -->
+                                {% for Size in Product.size.all %}
+                                <option value="{{Size.size}}"> {{Size.size}} </option>
+                                {% endfor %}
+                            </select>
+                            <input type="text" name="product" value="{{Product.id}}" hidden id="product_id"
+                                style="display: none;">
+                            <button class="btn btn-danger pull-right" id="add_to_cart"><i
+                                    class="icon-shopping-cart"></i> اضافه به سبد خرید</button>
+                            </form>
+                            {% endif %}
+                            <hr />
+                            <!--  ==========  -->
+                            <!--  = Share buttons =  -->
+                            <!--  ==========  -->
+                            <div class="share-item">
+                                <div class="pull-right social-networks">
+                                    <!-- AddThis Button BEGIN -->
+                                    <div class="addthis_toolbox addthis_default_style ">
+                                        <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+                                        <a class="addthis_button_tweet"></a>
+                                        <a class="addthis_button_pinterest_pinit"></a>
+                                        <a class="addthis_counter addthis_pill_style"></a>
+                                    </div>
+                                    <!-- <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-517459541beb3977"></script> -->
+                                    <!-- AddThis Button END -->
+                                </div>
+                                با دوستان خود به اشتراک بگذارید :
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--  ==========  -->
+            <!--  = Tabs with more info =  -->
+            <!--  ==========  -->
+            <div class="row">
+                <div class="span12">
+                    <ul id="myTab" class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#tab-1" data-toggle="tab">جزئیات</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div class="fade in tab-pane active" id="tab-1">
+                            <h3>توضیحات محصول</h3>
+                            <p>{{ Product.description }} </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /container -->
+
+    <!--  ==========  -->
+    <!--  = Footer =  -->
+    <!--  ==========  -->
+    {% include "Partials/Footer.html" %}
+
+
+    {% endblock Body %}

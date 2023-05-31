@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block Head %}
+<title></title>
+<style>
+    .clickable {
+        font-size: 32px;
+    }
+
+    .help_text {
+        font-size: 16px;
+        color: red;
+    }
+
+    .create-box {
+        margin: 20px;
+    }
+
+    .create-form {
+        padding: 5px;
+        width: 70%;
+
+    }
+
+    .create-form label {
+        margin-top: 20px;
+        font-size: 22px;
+    }
+
+    .create-form label::before {
+        content: "* ";
+        color: red;
+        font-size: 24px;
+    }
+
+    .create-form input {
+        width: 100%;
+        font-size: 20px;
+
+    }
+
+    .create-form textarea {
+        width: 100%;
+        height: 300px;
+    }
+
+    .create-form select {
+        font-size: 18px;
+        width: 100%;
+        height: 300px;
+    }
+
+    .create-form #id_in_stock {
+        width: auto;
+        display: inline;
+    }
+
+    .submit-btn {
+        display: inline;
+        float: right;
+        width: 90px;
+        height: 60px;
+        background-color: #E54B5D;
+        color: #fff;
+        font-size: 26px;
+        padding: 5px;
+    }
+</style>
+
+{% endblock Head %}
+
+{% block Body %}
+<div class="create-box">
+    <form  method="post">
+        {% csrf_token %}
+        <div>
+            <label for="id_first_name">نام:</label>
+            <input type="text" name="first_name" maxlength="150" id="id_first_name" required {% if User.first_name %}
+                value="{{User.first_name}}" {% else %} value="" {% endif %}>
+        </div>
+        <div>
+            <label for="id_last_name">نام خانوادگی:</label>
+            <input type="text" name="last_name" maxlength="150" id="id_last_name" required {% if User.last_name %}
+                value="{{User.last_name}}" {% else %} value="" {% endif %}>
+        </div>
+        <div>
+            <label for="id_email">آدرس ایمیل:</label>
+            <input type="email" name="email" maxlength="254" id="id_email" required {% if User.email %}
+                value="{{User.email}}" {% else %} value="" {% endif %}>
+        </div>
+        <div>
+            <label for="id_phone_number">شماره تلفن :</label>
+            <input type="text" name="phone_number" maxlength="11" id="id_phone_number" required {% if User.phone_number %}
+                value="{{User.phone_number}}" {% else %} value="" {% endif %}>
+        </div>
+        <div>
+            <label for="id_address">ادرس اصلی:</label>
+            <input type="text" name="address" maxlength="500" required id="id_address" {% if User.address %}
+                value="{{User.address}}" {% else %} value="" {% endif %}>
+        </div>
+        <div>
+            <label for="id_address2">ادرس دوم:</label>
+            <input type="text" name="address2" maxlength="500" id="id_address2" {% if User.address2 %}
+                value="{{User.address2}}" {% else %} value="" {% endif %}" required>
+        </div>
+        <div>
+            <label for="id_postal_code">کد پستی:</label>
+            <input type="text" name="postal_code" maxlength="20" required id="id_postal_code" {% if User.postal_code %}
+                value="{{User.postal_code}}" {% else %} value="" {% endif %}">
+        </div>
+        <button type="submit" class="submit-btn"> ثبت </button>
+    </form>
+</div>
+{% endblock Body %}

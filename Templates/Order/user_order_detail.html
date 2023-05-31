@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tags %}
+
+{% block Head %}
+<title> سفارش شماره {{Order.id}} </title>
+<style>
+    .checkout-container {
+        font-size: 22px;
+    }
+
+    .btn {
+        font-size: 22px;
+    }
+</style>    
+{% endblock Head %}
+
+
+{% block Body %}
+{% include "Partials/Header.html" %}
+<div class="master-wrapper">
+    <div class="container">
+        <div class="row">
+            <!--  = Main content =  -->
+            <section class="span12">
+                <div class="checkout-container">
+                    <div class="row">
+                        <div class="span10 offset1" style="margin: 15px;">
+                            <p> نام : {{Order.name}} </p>
+                            <p> شماره تماس : {{Order.phone}} </p>
+                            <p> آدرس تحویل : {{Order.address1}} </p>
+                            {% if Order.address2 %}
+                                <p> آدرس دوم : {{Order.address2}} </p>
+                            {% endif %}
+                            <p> کد پستی: {{Order.postal_code}} </p>
+                            <p> وضعیت پرداخت : &nbsp;&nbsp;
+                                <span class="stock">
+                                    {% if Order.status == 'cancelled' %}
+                                        <span class="btn btn-danger"> لغو شده </span>
+                                    {% elif Order.status == 'paid' %}
+                                        <span class="btn btn-success">پرداخت شده</span>
+                                    {% elif Order.status == 'wait' %}
+                                        <span class="btn btn-warning"> درانتظار پرداخت </span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a href="{% url 'Cart_Order:Order_Checkout_3' Order.id %}" class="btn btn-success">
+                                            پرداخت </a>
+                                        
+                                        <a href="{% url 'Cart_Order:Order_Cancell' %}?pk={{Order.id}}" class="btn btn-danger"> لغو </a>
+                                    {% endif %}
+                                </span>
+                            </p>
+                            {% if Order.status == 'paid' %}
+                                <p> شماره رهگیری : {{Order.tracking_number}} </p>
+                                <p> زمان پرداخت : {% j_date_time  Order.pay_time %} </p>
+                            {% endif %}
+                            <!--  = Selected Items =  -->
+                            <table class="table table-items">
+                                <thead >
+                                    <tr>
+                                        <th colspan="2">آيتم</th>
+                                        <th>
+                                            <div class="align-center">سایز</div>
+                                        </th>
+                                        <th>
+                                            <div class="align-center">رنگ</div>
+                                        </th>
+                                        <th>
+                                            <div class="align-center">تعداد</div>
+                                        </th>
+                                        <th>
+                                            <div class="align-right">قيمت</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for Item in Order.OrderItem.all %}
+                                    <tr>
+                                        <td class="image"><img src="{{ Item.product.get_product_banner }}" alt=""
+                                                width="124" height="124" /></td>
+                                        <td class="desc"><a href="{{ Item.product.get_absolute_url }}">{{ Item.name }}</a></td>
+                                        <td class="qty">
+                                            {{Item.size}}
+                                        </td>
+                                        <td class="qty">
+                                            {{Item.color}}
+                                        </td>
+                                        <td class="qty">
+                                            {{Item.order_amount}}
+                                        </td>
+                                        <td class="price">
+                                            {{ Item.price }}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td colspan="4" rowspan="4">
+                                            &nbsp;
+                                        </td>
+                                        <td class="stronger">هزينه ارسال :</td>
+                                        <td class="stronger">
+                                            <div class="align-right">20,000</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="stronger">جمع کل :</td>
+                                        <td class="stronger">
+                                            <div class="size-16 align-right">{{ Order.total_price }}</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </section> <!-- /main content -->
+        </div>
+    </div> <!-- /container -->
+</div> <!-- end of master-wrapper -->
+
+{% include "Partials/Footer.html" %}
+{% endblock Body %}

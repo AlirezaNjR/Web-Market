@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block Body_Classes %}
+    class="checkout-page"
+{% endblock Body_Classes %}
+
+{% block Body %}
+    
+    <div class="master-wrapper">
+     
+    
+    
+    <div class="container">
+        <div class="row">
+            
+            <!--  ==========  -->
+            <!--  = Main content =  -->
+            <!--  ==========  -->
+            <section class="span12">
+                
+                <div class="checkout-container">
+                    <div class="row">
+                    	<div class="span10 offset1">
+                    	    
+                    	    <!--  ==========  -->
+							<!--  = Header =  -->
+							<!--  ==========  -->
+                    		<header>
+                    		    <div class="row">
+                    		    	<div class="span2">
+                    		    		<a href="{% url 'Main:Home' %}"><img src="{% static 'images/logo-bw.png' %}" alt="Webmarket Logo" width="48" height="48" /></a>
+                    		    	</div>
+                    		    	<div class="span6">
+                    		    	    <div class="center-align">
+                    		    	        <h1><span class="light">آدرس ارسال و</span> پرداخت</h1>
+                    		    	    </div>
+                    		    	</div>
+                    		    	<div class="span2">
+                    		    	    <div class="right-align">
+                    		    	    	<img src="{% static 'images/buttons/security.jpg' %}" alt="Security Sign" width="92" height="65" />
+                    		    	    </div>
+                    		    	</div>
+                    		    </div>
+                    		</header>
+                    		
+                    		<!--  ==========  -->
+							<!--  = Steps =  -->
+							<!--  ==========  -->
+                    		<div class="checkout-steps">
+                    		    <div class="clearfix">
+                    		    	<div class="step done">
+                    		    	    <div class="step-badge"><i class="icon-ok"></i></div>
+                    		    	    <a href="{% url 'Cart_Order:Order_Checkout_1' %}">سبد خرید</a>
+                    		    	</div>
+                    		    	<div class="step active">
+                    		    	    <div class="step-badge">2</div>
+                    		    	    آدرس ارسال
+                    		    	</div>
+                    		    	<div class="step">
+                                        <div class="step-badge">2</div>
+                                        شیوه پرداخت
+                                    </div>
+                    		    	<div class="step">
+                    		    	    <div class="step-badge">4</div>
+                    		    	    تایید و پرداخت
+                    		    	</div>
+                    		    </div>
+                    		</div> <!-- /steps -->
+                    		
+						    <!--  ==========  -->
+							<!--  = Shipping addr form =  -->
+							<!--  ==========  -->
+							    
+						    <form  class="form-horizontal form-checkout" method="post">
+                                {% csrf_token %}
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">نام<span class="red-clr bold">*</span></label>
+                                    <div class="controls">
+                                        <input type="text" id="firstName" class="span4" required name="name">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="lastName">نام خانوادگی<span class="red-clr bold">*</span></label>
+                                    <div class="controls">
+                                        <input type="text" id="lastName" class="span4" required name="family">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="telephone">تلفن<span class="red-clr bold">*</span></label>
+                                    <div class="controls">
+                                        <input type="tel" id="telephone" class="span4" required name="phone">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="email">ایمیل<span class="red-clr bold">*</span></label>
+                                    <div class="controls">
+                                        <input type="email" id="email" class="span4" required name="email">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="addr1">ادرس 1<span class="red-clr bold">*</span></label>
+                                    <div class="controls">
+                                        <input type="text" id="addr1" class="span4" required name="address1">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="addr2">آدرس 2</label>
+                                    <div class="controls">
+                                        <input type="text" id="addr2" class="span4" name="address2">
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label class="control-label" for="zip">کد پستی<span class="red-clr bold">*</span></label>
+                                    <div class="controls">
+                                        <input type="text" id="zip" class="span4" name="postal_code">
+                                    </div>
+                                </div>
+                                
+                            
+							
+                            <hr />
+						    
+						    <p class="right-align">
+						        در مرحله بعدی شما شیوه پرداخت را انتخاب میکنید &nbsp; &nbsp;
+                                <button type="submit" class="btn btn-primary higher bold">ادامه</button>
+                            </p>
+							</form>   
+							    
+                    	</div>
+                    </div>
+                </div>
+                
+                
+            </section> <!-- /main content -->
+        
+        </div>
+    </div> <!-- /container -->
+    
+     
+    
+     
+    </div> <!-- end of master-wrapper -->
+
+{% endblock Body %}
+
+
+    
+    

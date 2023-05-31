@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block Head %}
+<title> لیست سفارشات </title>
+<style>
+    table {
+        width: 98%;
+        height: 30vh;
+        margin: 20px;
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+        border-collapse:collapse;
+    }
+
+    th {
+        border: 1px solid #333;
+        font-size: 32px;
+    }
+
+    tr {
+        border: #333 solid 1px;
+        font-size: 26px;
+    }
+
+    td{
+        border: 1px solid #333;
+    }
+
+    .btn{
+        font-size: 22px;
+    }
+</style>
+{% endblock Head %}
+
+{% block Body_Classes %}
+class=" checkout-page"
+{% endblock Body_Classes %}
+
+{% block Body %}
+{% include "Partials/Header.html" %}
+
+
+
+<table >
+    <tr>
+        <th> نام :</th>
+        <th> مبلغ :</th>
+        <th> وضعیت :</th>
+        <th style="border: transparent !important;"> جزئیات :</th>
+    </tr>
+    
+    {% for Order in Orders %}
+    <tr>
+        <td>{{Order.name}}</td>
+        <td>{{Order.total_price}}</td>
+        <td>
+            <span class="stock">
+                {% if Order.status == 'cancelled' %}
+                    <span class="btn btn-danger"> لغو شده </span>
+                {% elif Order.status == 'paid' %}
+                    <span class="btn btn-success">پرداخت شده</span>
+                {% elif Order.status == 'wait' %}
+                    <span class="btn btn-warning"> درانتظار پرداخت </span>
+                {% endif %}
+            </span>
+        </td>
+        <td style="border: transparent !important;">
+            <!-- <span class="btn btn-warning">  -->
+                <a href="{% url 'Cart_Order:User_Order_Detail' Order.id %}">
+                    جزئیات </a>
+            <!-- </span> -->
+        </td>
+    </tr>
+
+    {% empty %}
+    <p> شما تا کنون سفارشی نداشتید </p>
+
+
+    {% endfor %}
+</table>
+
+
+
+{% include "Partials/Footer.html" %}
+{% endblock Body %}

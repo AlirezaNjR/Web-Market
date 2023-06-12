@@ -1,7 +1,7 @@
 # Django Store Project (Web Market)
-A shop project with Django with an API written with DRF and using Ajax to prevent page refreshes
+A shop project with Django with an API written with DRF and using Ajax to prevent page refreshes 
 
-یک پروژه فروشگاهی با جنگو با API نوشته شده با DRF و استفاده از Ajax برای جلوگیری از به‌روزرسانی صفحه
+یک پروژه فروشگاهی با جنگو دارای بخش وبلاگ و با API نوشته شده با DRF و استفاده از Ajax برای جلوگیری از به‌روزرسانی صفحه  
 
 
 

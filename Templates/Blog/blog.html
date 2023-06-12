@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load martortags tags %}
+
+
+{% block Body %}
+
+{% include "Partials/Header.html" %}
+
+<div class="master-wrapper">
+
+    <!--  ==========  -->
+    <!--  = Breadcrumbs =  -->
+    <!--  ==========  -->
+    <div class="darker-stripe">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{% url 'Main:Home' %}">وبمارکت</a>
+                        </li>
+                        <li><span class="icon-chevron-right"></span></li>
+                        <li>
+                            <a href="{% url 'Blog:List' %}">بلاگ</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="push-up top-equal blocks-spacer">
+            <div class="row">
+
+                <!--  ==========  -->
+                <!--  = Main Title =  -->
+                <!--  ==========  -->
+
+                <div class="span12">
+                    <div class="title-area">
+                        <h1 class="inline"><span class="light">بلاگ</span> وبمارکت</h1>
+                        <h2 class="inline tagline">- جایی که آدمهای باهوش، حرفهای احمقانه میزنند!</h2>
+                    </div>
+                </div>
+
+                <!--  ==========  -->
+                <!--  = Main content =  -->
+                <!--  ==========  -->
+                <section class="span8 blog">
+                    {% for Post in Posts %}
+                    {% if not Post.cover %} 
+                    <!--  ==========  -->
+                    <!--  = Simple Post =  -->
+                    <!--  ==========  -->
+                    <article class="post format-standard">
+                        <div class="post-inner">
+                            <div class="post-title">
+                                <h2><a href="{{ Post.get_absolute_url }}"> {{Post.title}} </a></h2>
+                                <div class="metadata">
+                                    {% j_date_time Post.created %} /
+                                    <a href="">{{ Post.Comments.count }}
+                                        نظر</a> /
+                                    Posted By: <a rel="category tag" title="View all posts in aciform"
+                                        href="#">{{Post.author }}</a>
+                                </div>
+                            </div>
+
+                            <p class="push-down-25" style="font-size: 8px;">
+                                {{ Post.description|truncatewords:5|safe_markdown }}
+                            </p>
+
+                            <a href="{{ Post.get_absolute_url }}" class="btn btn-primary bold higher">ادامه مطلب</a>
+                        </div>
+                    </article>
+                    {% else %}
+                    <!--  ==========  -->
+                    <!--  = Post with Image =  -->
+                    <!--  ==========  -->
+                    <article class="post format-image">
+                        <div class="post-inner">
+                            <a href="{{ Post.get_absolute_url }}"><img src="{{ Post.cover.url }}" alt="featured image"
+                                    width="1540" height="746" /></a>
+                            <div class="post-title">
+                                <h2><a href="{{ Post.get_absolute_url }}">{{ Post.title }}</h2>
+                                <div class="metadata">
+                                    {% j_date_time Post.created %} /
+                                    <a href=""> {{ Post.Comments.count }} نظر </a> /
+                                    Posted By: <a rel="category tag" title="View all posts in aciform"
+                                        href="#">{{Post.author }}</a>
+                                </div>
+                            </div>
+
+                            <p class="push-down-25">
+                                {{ Post.description|truncatewords:5|safe_markdown }}
+                            </p>
+
+                            <a href="{{ Post.get_absolute_url }}" class="btn btn-primary bold higher">ادامه مطلب</a>
+                        </div>
+                    </article>
+
+                    {% endif %}
+                    {% empty %}
+                    <h3>هیچ پستی وجود ندارد</h3>
+                    {% endfor %}
+                    <hr />
+                    <!--  ==========  -->
+                    <!--  = Pagination =  -->
+                    <!--  ==========  -->
+                    <div class="pagination">
+                        <ul>
+                            {% if page_obj.has_previous %}
+                            <li>
+                                <a href="{% url 'Blog:List' %}?page={{page_obj.previous_page_number}}"
+                                    class="btn btn-primary"><span class="icon-chevron-left"></span></a>
+                            </li>
+                            {% endif %}
+
+                            {% for Page in page_obj.paginator.page_range %}
+                            <li {% if Page == page_obj.paginator.num_pages %} class="active" {% endif %}>
+                                <a href="{% url 'Blog:List' %}?page={{Page}}">{{Page}}</a>
+                            </li>
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                            <li><a href="{% url 'Blog:List' %}?page={{page_obj.next_page_number}}"
+                                    class="btn btn-primary"><span class="icon-chevron-right"></span></a></li>
+                            {% endif %}
+                        </ul>
+                    </div> <!-- /pagination -->
+
+                </section> <!-- /main content -->
+
+                <!--  ==========  -->
+                <!--  = Sidebar =  -->
+                <!--  ==========  -->
+                <aside class="span4 right-sidebar">
+
+                    <!--  ==========  -->
+                    <!--  = Search Widget =  -->
+                    <!--  ==========  -->
+                    <div class="sidebar-item widget_search">
+                        <!-- <div class="underlined">
+                            <h3><span class="light">Search</span></h3>
+                        </div> -->
+
+                        <form class="form" action="{% url 'Blog:Search' %}" id="searchform" method="get" role="search">
+                            <input type="text" id="appendedInputButton" class="input-block-level" name="key"
+                                placeholder="جستجو در نوشته ها ...">
+                            <button type="submit">
+                                <i class="icon-search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                   
+
+                </aside> <!-- /sidebar -->
+
+            </div>
+        </div>
+    </div> <!-- /container -->
+
+    <!--  ==========  -->
+    <!--  = Footer =  -->
+    <!--  ==========  -->
+    {% include "Partials/Footer.html" %}
+</div> <!-- end of master-wrapper -->
+
+{% endblock Body %}

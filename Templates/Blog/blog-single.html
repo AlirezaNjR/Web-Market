@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% load tags martortags %}
+
+{% block Head %}
+<title>وب مارکت - وبلاگ : {{ Post.title }} </title>
+<style>
+    .delete {
+        font-size: 32px;
+        text-decoration: none;
+        padding: 10px;
+        float: left;
+        background-color: #E54B5D;
+        color: #333;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+    .delete:hover {
+        text-decoration: none;
+        background-color: #333;
+        color: #E54B5D;
+    }
+
+    .edit {
+        font-size: 22px;
+        margin-left: 5px;
+        text-decoration: none;
+        padding: 10px;
+        float: left;
+        background-color: #f53aff;
+        color: #333;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+    .edit:hover {
+        text-decoration: none;
+        background-color: #333;
+        color: #f53aff;
+    }
+</style>
+{% endblock Head %}
+
+
+{% block Body %}
+
+<div class="master-wrapper">
+
+    <!--  ==========  -->
+    <!--  = Header =  -->
+    <!--  ==========  -->
+    {% include "Partials/Header.html" %}
+
+    <!--  ==========  -->
+    <!--  = Breadcrumbs =  -->
+    <!--  ==========  -->
+    <div class="darker-stripe">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{% url 'Main:Home' %}">وبمارکت</a>
+                        </li>
+                        <li><span class="icon-chevron-right"></span></li>
+                        <li>
+                            <a href="{% url 'Blog:List' %}">بلاگ</a>
+                        </li>
+                        <li><span class="icon-chevron-right"></span></li>
+                        <li>
+                            <a href="{{ Post.get_absolute_url }}"> {{Post.title}} </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="push-up top-equal blocks-spacer">
+            <div class="row">
+
+                <!--  ==========  -->
+                <!--  = Main Title =  -->
+                <!--  ==========  -->
+
+                <div class="span12">
+                    <div class="title-area">
+                        <h1 class="inline"><span class="light">بلاگ</span> وبمارکت</h1>
+                        <h2 class="inline tagline">- جایی که آدمهای باهوش، حرفهای احمقانه میزنند!</h2>
+                    </div>
+                </div>
+
+                <!--  ==========  -->
+                <!--  = Main content =  -->
+                <!--  ==========  -->
+                <section class="span8 single single-post">
+
+                    <!--  ==========  -->
+                    <!--  = Post =  -->
+                    <!--  ==========  -->
+                    <article class="post format-video">
+                        <div class="post-inner">
+                            {% if Post.cover %}
+                            <img src="{{ Post.cover.url }}" alt="featured image" width="1540" height="746" />
+                            {% endif %}
+
+                            <div class="post-title">
+                                <h2>{{ Post.title }} </h2>
+                                <div class="metadata">
+                                    {% j_date_time Post.created %} /
+                                    <a href="">بدون
+                                        نظر</a> /
+                                    Posted By: <a title="View all posts in aciform" href="#">{{ Post.author }}</a>
+                                    <span style="float: left;">
+                                        {% if user == Post.author or user.is_superuser %}
+                                        <a href="{% url 'Blog:Delete' Post.id %}" class="delete"> حذف </a>
+                                        <a href="{% url 'Blog:Update' Post.id %}" class="edit"> ویرایش </a>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p>
+                                {{ Post.description|safe_markdown }}
+                            </p>
+
+                        </div>
+                    </article>
+
+                    <hr />
+
+                    <!--  ==========  -->
+                    <!--  = Comments =  -->
+                    <!--  ==========  -->
+
+                    <section id="comments" class="comments-container">
+                        <h3 class="push-down-25"><span class="light"> {{ Post.Comments.count }} </span> نظر</h3>
+                        {% for Comment in Post.Comments.all %}
+                            <!--  ==========  -->
+                            <!--  = Single Comment =  -->
+                            <!--  ==========  -->
+                            <div class="single-comment clearfix">
+                                <div class="avatar-container">
+                                    <img src="images/dummy/avatars/avatar-2.jpg" alt="avatar" class="avatar" width="184"
+                                        height="184" />
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-inner">
+                                        <cite class="author-name">
+                                            {{ Comment.name }}
+                                        </cite>
+                                        <div class="metadata">
+                                             {% j_date_time Comment.datetime %} / <a href="#">پاسخ</a>
+                                        </div>
+                                        <div class="comment-text">
+                                            <p> {{ Comment.text }} </p>
+                                        </div>
+                                    </div>
+                                </div>
+                        {% endfor %}
+
+
+                        <hr />
+
+                        <h3 class="push-down-25"><span class="light">نظر</span> بدهید</h3>
+
+                        <form id="commentform" method="post" action="#" class="form form-inline form-comments">
+                            {% csrf_token %}
+                            <p class="push-down-20">
+                                <input type="text" aria-required="true" tabindex="1" size="30" value="" id="author"
+                                    name="name" required>
+                                <label for="author">نام<span class="red-clr bold">*</span></label>
+                            </p>
+                            <p class="push-down-20">
+                                <input type="email" aria-required="true" tabindex="2" size="30" value="" id="email"
+                                    name="email" required>
+                                <label for="email">ایمیل<span class="red-clr bold">*</span></label>
+                            </p>
+                            <p class="push-down-20">
+                                <input type="text" tabindex="3" size="30" value="" id="url" name="website">
+                                <label for="url">وبسایت</label>
+                            </p>
+
+                            <p class="push-down-20">
+                                <textarea class="input-block-level" tabindex="4" rows="7" cols="70" id="comment"
+                                    name="text" placeholder="نظرتان را در اینجا بنویسید ..." required></textarea>
+                            </p>
+                            <p>
+                                <button class="btn btn-primary bold" type="submit" tabindex="5" id="submit">ارسال
+                                    نظر</button>
+                            </p>
+                        </form>
+
+                    </section>
+
+                </section> <!-- /main content -->
+
+                <!--  ==========  -->
+                <!--  = Sidebar =  -->
+                <!--  ==========  -->
+                <aside class="span4 right-sidebar">
+
+                    <!--  ==========  -->
+                    <!--  = Search Widget =  -->
+                    <!--  ==========  -->
+                    <div class="sidebar-item widget_search">
+                        <!-- <div class="underlined">
+                            <h3><span class="light">Search</span></h3>
+                        </div> -->
+
+                        <form class="form" action="{% url 'Blog:Search' %}" id="searchform" method="get" role="search">
+                            <input type="text" id="appendedInputButton" class="input-block-level" name="key"
+                                placeholder="جستجو در نوشته ها ...">
+                            <button type="submit">
+                                <i class="icon-search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                </aside> <!-- /sidebar -->
+
+            </div>
+        </div>
+    </div> <!-- /container -->
+
+
+
+
+    <!--  ==========  -->
+    <!--  = Footer =  -->
+    <!--  ==========  -->
+    {% include "Partials/Footer.html" %}
+</div>
+{% endblock Body %}

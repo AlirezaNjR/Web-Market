@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block Head %}
+<link href="{% static 'plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'martor/css/martor.semantic.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'plugins/css/semantic.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+<style>
+    .clickable {
+        font-size: 32px;
+    }
+
+    .help_text {
+        font-size: 16px;
+        color: red;
+    }
+
+    .create-box {
+        margin: 20px;
+    }
+
+    .create-form {
+        padding: 5px;
+        width: 70%;
+
+    }
+
+    .create-form label {
+        margin-top: 20px;
+        font-size: 22px;
+    }
+
+    .create-form label::before {
+        content: "* ";
+        color: red;
+        font-size: 24px;
+    }
+
+    .create-form input {
+        width: 100%;
+        font-size: 20px;
+
+    }
+
+    textarea {
+        font-size: 32px;
+        width: 100%;
+        height: 300px;
+    }
+
+    .create-form select {
+        font-size: 18px;
+        width: 100%;
+        height: 300px;
+    }
+
+    .submit-btn {
+        display: inline;
+        width: 90px;
+        height: 60px;
+        background-color: #E54B5D;
+        color: #fff;
+        font-size: 26px;
+        padding: 5px;
+    }
+</style>
+{% endblock Head %}
+
+{% block Body %}
+{% include "Partials/Header.html" %}
+
+    <form action="" method="post" enctype="multipart/form-data" class="create-form">
+        {% csrf_token %}
+        {{form.as_div}}
+        <button type="submit" class="submit-btn"> ثبت </button>
+    </form>
+{% include "Partials/Footer.html" %}
+
+{% endblock Body %}
+
+{% block Script %}
+<script type="text/javascript" src="{% static 'plugins/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/semantic.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/ace.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/mode-markdown.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/ext-language_tools.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/theme-github.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/typo.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/spellcheck.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/resizable.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/emojis.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'martor/js/martor.semantic.min.js' %}"></script>
+<script>
+    $('.ui.menu .ui.dropdown.item').dropdown();
+</script>
+{% endblock Script %}

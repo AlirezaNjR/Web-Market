@@ -37,16 +37,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     #! Apps
     'Accounts.apps.AccountsConfig',
     'MainPages.apps.MainpagesConfig',
     'Product.apps.ProductConfig',
     'Cart_Order.apps.CartOrderConfig',
-    
+
     #! API
     'rest_framework.apps.RestFrameworkConfig',
     'Api.apps.ApiConfig',
+
+    #! Blog
+    'martor',
+    'Blog.apps.BlogConfig',
+
+    #! Comment
+    'Comment.apps.CommentConfig',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +153,6 @@ LOGOUT_REDIRECT_URL = 'Main:Home'
 
 # CSRF
 CSRF_TRUSTED_ORIGINS = ['chrome-extension://eejfoncpjfgmeleakejdcanedmefagga']
+
+# Martor
+MARTOR_THEME = 'semantic'

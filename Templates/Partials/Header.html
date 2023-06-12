@@ -83,8 +83,10 @@
                                 <li {% if request.path == '/' %} class="active" {% endif %} ><!--  class="dropdown active" -->
                                      <a href="{% url 'Main:Home' %}"> خانه  </a><!-- class="dropdown-toggle" <b class="caret"></b>-->
                                 </li>
+                                <li {% if 'Blog' in request.path  %} class="active" {% endif %} ><a href="{% url 'Blog:List' %}" >بلاگ  </a></li>
                                 <li {% if request.path == '/About-Us/' %} class="active" {% endif %} ><a href="{% url 'Main:AboutUs' %}">درباره ما</a></li>
                                 <li {% if request.path == '/Contact/' %} class="active" {% endif %}><a href="{% url 'Main:Contact' %}">تماس با ما</a></li>
+                                
                             </ul>
 
                             <!--  ==========  -->

@@ -1543,6 +1543,50 @@ label { font-weight: bold; }
 	color: #E54B5D;
 }
 
+/* new */
+#blog-new-post {
+	position: fixed;
+	bottom: 24px;
+	left: 100px;
+	z-index: 700;
+	display: none;
+}
+
+#blog-new-post a {
+	text-decoration: none;
+	border: 0 none;
+	display: block;
+	height: 63px;
+	width: 60px;
+	line-height: 63px;
+	text-align: center;
+	background: #f53aff;
+	color: #fff;
+	text-align: center;
+	text-transform: uppercase;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	transition: all 0.2s ease-in-out;
+}
+
+#blog-new-post a i {
+	font-size: 24px;
+	line-height: inherit;
+}
+
+#blog-new-post a:visited {
+	background: #f53aff;
+	color: #fff;
+}
+
+#blog-new-post a:hover,
+#blog-new-post a:focus {
+	background: #333;
+	color: #f53aff;
+}
+
 /* ========== */
 /* = Twitter = */
 /* ========== */

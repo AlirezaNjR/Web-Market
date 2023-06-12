@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load tags martortags %}
+
+
+{% block Head %}
+<title> حذف {{Post.title}} </title>
+<style>
+    .delete {
+        font-size: 32px;
+        text-decoration: none;
+        padding: 10px;
+        background-color: #E54B5D;
+        color: #333;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+    .delete:hover {
+        text-decoration: none;
+        background-color: #333;
+        color: #E54B5D;
+    }
+
+    .return-btn {
+        font-size: 22px;
+        margin-left: 5px;
+        text-decoration: none;
+        padding: 5px;
+        background-color: #f53aff;
+        color: #333;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+    .return-btn:hover {
+        text-decoration: none;
+        background-color: #333;
+        color: #f53aff;
+    }
+</style>
+{% endblock Head %}
+
+
+{% block Body %}
+
+{% include "Partials/Header.html" %}
+<h1> ایا میخواهید حذف کنید ؟ </h1>
+<br><br>
+<div class="container">
+    <div class="push-up top-equal blocks-spacer">
+        <div class="row">
+
+            <!--  ==========  -->
+            <!--  = Main content =  -->
+            <!--  ==========  -->
+            <section class="span8 single single-post">
+                <!--  ==========  -->
+                <!--  = Post =  -->
+                <!--  ==========  -->
+                <article class="post format-video">
+                    <div class="post-inner">
+                        {% if Post.cover %}
+                        <img src="{{ Post.cover.url }}" alt="featured image" width="1540" height="746" />
+                        {% endif %}
+
+                        <div class="post-title">
+                            <h2>{{ Post.title }} </h2>
+                           
+                        </div>
+
+                        <p>
+                            {{ Post.description|safe_markdown }}
+                        </p>
+
+                    </div>
+                </article>
+            </section>
+        </div>
+    </div>
+</div>
+<hr />
+<center>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" class="delete"> حذف </button>
+        <a href="{{ Post.get_absolute_url }}" class="return-btn"> بازگشت </a>
+    </form>
+</center>
+{% include "Partials/Footer.html" %}
+{% endblock Body %}

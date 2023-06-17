@@ -35,7 +35,8 @@ class PostDetailView(DetailView):
                 post=post,
             )
             return redirect('Blog:Detail', pk=post.pk)
-
+        else :
+            return HttpResponse('400')
     model = PostModel
     template_name = 'Blog/blog-Single.html'
     context_object_name = 'Post'

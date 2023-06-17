@@ -197,3 +197,52 @@ for (const btn of DeleteProductImgBtns) {
     });
   });
 }
+
+//! New Comment for blog Post ajax func
+var AddCommentBtn = document.getElementById("add-comment");
+if (AddCommentBtn != null) {
+  AddCommentBtn.addEventListener("click", function (e) {
+    var datetime = new persianDate();
+    e.preventDefault();
+    $.ajax({
+      url: `/Blog/${AddCommentBtn.getAttribute("data-id")}/Detail/`,
+      type: "post",
+      datetype: "json",
+      data: {
+        name: document.getElementById("author").value,
+        text: document.getElementById("comment").value,
+        email: document.getElementById("email").value,
+        csrfmiddlewaretoken: getCookie("csrftoken"),
+      },
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      success: (data) => {
+        var CommentsBox = document.getElementById("comments-container");
+        console.log(CommentsBox);
+        CommentsBox.innerHTML += `<div class="single-comment clearfix">
+					<div class="avatar-container">
+						<img src="/Static/images/user-96.png" alt="avatar" class="avatar" width="184"
+							height="184" />
+					</div>
+					<div class="comment-content">
+						<div class="comment-inner">
+							<cite class="author-name">
+								${document.getElementById("author").value}
+							</cite>
+							<div class="metadata">
+									${datetime.toLocale("en").format("HH:mm:ss - YYYY/MM/DD")}/ <a href="#">پاسخ</a>
+							</div>
+							<div class="comment-text">
+								<p> ${document.getElementById("comment").value} </p>
+							</div>
+						</div>
+					</div>
+				</div>`;
+			document.getElementById('comment-count').innerHTML = Number(document.getElementById('comment-count').innerHTML) + 1;
+			},
+      error: (error) => {},
+    });
+  });
+}

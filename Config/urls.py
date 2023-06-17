@@ -5,13 +5,22 @@ from Config.settings import MEDIA_ROOT, MEDIA_URL, DEBUG
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #! Main Pages
     path('', include('MainPages.urls')),
+    #! Product App
     path('Product/', include('Product.urls')),
+    #! Accounts
     path('Accounts/', include('Accounts.urls')),
+    #! Cart Order
     path('', include('Cart_Order.urls')),
+    #! Api
     path('Api/V1/', include('Api.urls')),
+    #! martor
     path('martor/', include('martor.urls')),
-    path('Blog/', include('Blog.urls'))
+    #! Blog
+    path('Blog/', include('Blog.urls')),
+    #! Comments
+    path("Comments/", include('Comment.urls'))
 ]
 
 handler404 = 'MainPages.views.err_404_view'

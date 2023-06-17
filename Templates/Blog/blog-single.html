@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load tags martortags %}
+{% load  static  %}
 
 {% block Head %}
 <title>وب مارکت - وبلاگ : {{ Post.title }} </title>
@@ -109,8 +110,7 @@
                                 <h2>{{ Post.title }} </h2>
                                 <div class="metadata">
                                     {% j_date_time Post.created %} /
-                                    <a href="">بدون
-                                        نظر</a> /
+                                
                                     Posted By: <a title="View all posts in aciform" href="#">{{ Post.author }}</a>
                                     <span style="float: left;">
                                         {% if user == Post.author or user.is_superuser %}
@@ -135,14 +135,16 @@
                     <!--  ==========  -->
 
                     <section id="comments" class="comments-container">
-                        <h3 class="push-down-25"><span class="light"> {{ Post.Comments.count }} </span> نظر</h3>
+                        <h3 class="push-down-25"><span class="light" id="comment-count"> {{ Post.Comments.count }} </span> نظر</h3>
+                        <div id="comments-container">
                         {% for Comment in Post.Comments.all %}
+                           
                             <!--  ==========  -->
                             <!--  = Single Comment =  -->
                             <!--  ==========  -->
                             <div class="single-comment clearfix">
                                 <div class="avatar-container">
-                                    <img src="images/dummy/avatars/avatar-2.jpg" alt="avatar" class="avatar" width="184"
+                                    <img src="{% static 'images/user-96.png' %}" alt="avatar" class="avatar" width="184"
                                         height="184" />
                                 </div>
                                 <div class="comment-content">
@@ -154,18 +156,22 @@
                                              {% j_date_time Comment.datetime %} / <a href="#">پاسخ</a>
                                         </div>
                                         <div class="comment-text">
+                                            {% if user.is_superuser %}
+                                                <a href="{% url 'Comment:Delete' Comment.pk %}?rd={{request.path}}" class="delete">حذف</a>
+                                            {% endif %}
                                             <p> {{ Comment.text }} </p>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         {% endfor %}
-
-
+                        
+                        </div>
                         <hr />
 
                         <h3 class="push-down-25"><span class="light">نظر</span> بدهید</h3>
 
-                        <form id="commentform" method="post" action="#" class="form form-inline form-comments">
+                        <form id="commentform" method="post" action="" class="form form-inline form-comments">
                             {% csrf_token %}
                             <p class="push-down-20">
                                 <input type="text" aria-required="true" tabindex="1" size="30" value="" id="author"
@@ -187,7 +193,7 @@
                                     name="text" placeholder="نظرتان را در اینجا بنویسید ..." required></textarea>
                             </p>
                             <p>
-                                <button class="btn btn-primary bold" type="submit" tabindex="5" id="submit">ارسال
+                                <button class="btn btn-primary bold" id="add-comment" data-id="{{Post.pk}}" type="submit" tabindex="5" id="submit">ارسال
                                     نظر</button>
                             </p>
                         </form>
